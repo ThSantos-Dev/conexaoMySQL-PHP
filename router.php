@@ -9,6 +9,8 @@
  * Versão: 1.0
  *************************************************************************************/
 
+
+
  $action = (string) null;
  $component = (string) null;
  
@@ -24,30 +26,35 @@
         switch ($component) {
             // Resgatando os valores que o usuário digitou de acordo com o COMPONENT que solicitou
             case 'CONTATOS':
-                echo('Chamando a controller de CONTATOS');
+                //  Import da controller Contatos
+                require_once('./controllers/controllerContatos.php');
+
+                // Validação para identificar o tipo de ação que será realizada
+                if($action == 'INSERIR'){
+
+                    // Chama a função de inserir na controller
+                    $resposta = inserirContato($_POST);
+                    // Valida o tipo de daos que a controller retornou
+                    if(is_bool($resposta)){
+                        // Verificando se p retorno foi verdadeiro
+                        if($resposta)
+                        echo "<script>
+                                alert('Registro Inserido com Sucesso!')
+                                window.location.href = 'index.php'
+                             </script>";
+                      
+                    // Se o retorno for um array significa houve erro no processo de inserção 
+                    } elseif(is_array($resposta)){
+                        echo "<script>
+                                alert('".$resposta['message']."')
+                                window.history.back()
+                            </script>";
+                    }
+                } // window.location.href = arquivo
+                  // window.history.back()
                 break;
                                 
-            default:
-                
+            default:                
                 break;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-?>

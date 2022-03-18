@@ -21,10 +21,10 @@
  const PASSWORD = 'bcd127';
  const DATABASE = 'db_contatos';
 
- $resultado = conexaoMySQL();
- echo '<pre>';
-    print_r($resultado);
- echo '</pre>';
+//  $resultado = conexaoMySQL();
+//  echo '<pre>';
+//     print_r($resultado);
+//  echo '</pre>';
 
  // Abre a conexão com o banco de dados MySQL
  function conexaoMySQL(){

@@ -4,8 +4,8 @@
         <meta charset="UTF-8">
         <title> Cadastro </title>
         <link rel="stylesheet" type="text/css" href="css/style.css">
-
-
+        <!-- Icon -->
+        <link rel = "icon" href ="https://cdn-icons-png.flaticon.com/512/2910/2910756.png" type = "image/x-icon">
     </head>
     <body>
        
@@ -21,7 +21,7 @@
                             <label> Nome: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="text" name="txtNome" value="" placeholder="Digite seu Nome" maxlength="100">
+                            <input type="text" name="txtNome" value="" placeholder="Digite seu Nome" maxlength="100" required>
                         </div>
                     </div>
                                      
@@ -81,18 +81,30 @@
                     <td class="tblColunas destaque"> Opções </td>
                 </tr>
                 
-               
-                <tr id="tblLinhas">
-                    <td class="tblColunas registros"></td>
-                    <td class="tblColunas registros"></td>
-                    <td class="tblColunas registros"></td>
-                   
-                    <td class="tblColunas registros">
-                            <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
-                            <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
-                            <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">
-                    </td>
-                </tr>
+               <?php
+                    require_once('controllers/controllerContatos.php');
+                    $listContato = listaContato();
+
+                    foreach($listContato as $item) {
+
+               ?>
+
+                    <tr id="tblLinhas">
+                        <td class="tblColunas registros"><?=$item['nome']?></td>
+                        <td class="tblColunas registros"><?=$item['email']?></td>
+                        <td class="tblColunas registros"><?=$item['telefone']?></td>
+                    
+                        <td class="tblColunas registros">
+                                <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
+                                <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir">
+                                <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">
+                        </td>
+                    </tr>
+
+                <?php
+                    }
+                ?>
+
             </table>
         </div>
     </body>
