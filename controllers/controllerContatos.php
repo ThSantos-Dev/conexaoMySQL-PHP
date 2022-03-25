@@ -47,8 +47,22 @@ function inserirContato($dadosContato) {
 }
 
 //  Função para realizar a exclusão do contato (excluir)
-function excluirContato() {
-
+function excluirContato($id) {
+    // Validação para verificar se o $id contém um número VÁLIDO.
+    if($id != 0 && !empty($id) && is_numeric($id)){
+        // Import do arquivo de modelagem para manipular o BD.
+        require_once('models/bd/contato.php');
+        
+        // Chama a função da models e valida se o retorno foi true ou false
+        if(deleteContato($id))
+            return true;
+        else 
+            return array('idErro'   => 3,
+                        'message'  => 'O banco de dados não pode excluir o registro.');
+    } else {
+        return array('idErro'   => 4,
+                     'message'  => 'Não é possível excluir um registro sem informar um ID válido.');
+    }
 }
 
 //  Função para receber dados da VIEW e encaminhar dados para a MODEL (Atualizar)
@@ -73,10 +87,9 @@ function listaContato() {
 
 
 
-
-
-
-
+                    /*************************************************************************** */
+                    // LEMBRAR O MARCEL DE CRIAR TABELA COM TODOS OS IDs DE MENSAGEM DE ERRO!!   //
+                    /*************************************************************************** */
 
 
 

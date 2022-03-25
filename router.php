@@ -16,7 +16,7 @@
  
 
 //  Validação para verificar se a requisição é um POST de um formulário
-    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET'){
         // Resgatando dados para as variáveis de ambiente - via URL
         // Para saber quem esta solicitando e qual ação será executada
         $action = strtoupper($_GET['action']);
@@ -52,8 +52,38 @@
                     }
                 } // window.location.href = arquivo
                   // window.history.back()
+                
+                elseif($action == 'DELETAR') {
+                    /**
+                     * Recebe o ID do registro que deverá ser excluído,
+                     * que foi enviado pela url no link da imagem
+                     * do excluir que foi acionado na index
+                     */
+                    $idContato = $_GET['id'];
+
+                    $resposta = excluirContato($idContato);
+
+                    // Valida o tipo de daos que a controller retornou
+                    if(is_bool($resposta)){
+                        // Verificando se p retorno foi verdadeiro
+                        if($resposta)
+                        echo "<script>
+                                alert('Registro Excluido com Sucesso!')
+                                window.location.href = 'index.php'
+                             </script>";
+                      
+                    // Se o retorno for um array significa houve erro no processo de inserção 
+                    } elseif(is_array($resposta)){
+                        echo "<script>
+                                alert('".$resposta['message']."')
+                                window.history.back()
+                            </script>";
+                    }
+                }
+
+
                 break;
-                                
+
             default:                
                 break;
         }

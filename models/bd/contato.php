@@ -1,4 +1,5 @@
 <?php
+
 /**********************************************************************************
  * Objetivo: Arquivo responsável por manipular os dados dentro do BD 
  *                                               (Insert, Update, Select e Delete)
@@ -15,9 +16,13 @@ require_once('conexaoMySQL.php');
 
 
 // Função para realizar o INSERT no BD
-function insertContato($dadosContato) {
+function insertContato($dadosContato)
+{
     // Abre a conexão com o BD
     $conexao = conexaoMySQL();
+
+    // Declaração de variável  oara utilizar no return dessa função
+    $statusResposta = (bool) false;
 
     // Script SQL para inserir os dados no BD
     $sql = "
@@ -29,11 +34,11 @@ function insertContato($dadosContato) {
             obs
         ) 
         values (
-            '".$dadosContato['nome']."',
-            '".$dadosContato['telefone']."',
-            '".$dadosContato['celular']."',
-            '".$dadosContato['email']."',
-            '".$dadosContato['obs']."'
+            '" . $dadosContato['nome'] . "',
+            '" . $dadosContato['telefone'] . "',
+            '" . $dadosContato['celular'] . "',
+            '" . $dadosContato['email'] . "',
+            '" . $dadosContato['obs'] . "'
         );";
 
     // echo '</br></br></br>Script SQL:</br>';
@@ -43,43 +48,64 @@ function insertContato($dadosContato) {
     // echo '</pre>';
 
     // echo '</br>dados inseridos com sucesso!';
-    
-    
+
+
     // Executa Script no BD
     // msyqli_query(dados de conexao, script sql)
-        // Validação para verificar se o script SQL está correto
-    if(mysqli_query($conexao, $sql)) {
-        // Validação para verificar se uma linha foi acrescentada no BD
-        if(mysqli_affected_rows($conexao))
-            return true;
-        else 
-            return false;
+    // Validação para verificar se o script SQL está correto
+    if (mysqli_query($conexao, $sql)) {
+        // Validação para verificar se uma linha foi afetada (acrescentada) no BD
+        if (mysqli_affected_rows($conexao))
+            $statusResposta = true;
     }
-    else 
-        return false;
-}
- 
-// Função para realizar o UPDATE no BD
-function updateContato() {
 
+    // Solicita o fechamento da conexão com o BD
+    fecharConexaoMySQL($conexao);
+    return $statusResposta;
+}
+
+// Função para realizar o UPDATE no BD
+function updateContato()
+{
 }
 
 // Função para realizar o EXCLUIR no BD
-function deleteContato() {
+function deleteContato($id)
+{
+    // Abre a conexão com o BD
+    $conexao = conexaoMySQL();
 
+    // Declaração de variável  oara utilizar no return dessa função
+    $statusResposta = (bool) false;
+
+    // Script SQL para exluir os dados no BD
+    $sql = "delete from tbl_contatos where id_contato=".$id;
+
+    // Validação para verificar se o script SQL está correto, sem erro de sintaxe e execut no BD
+    if (mysqli_query($conexao, $sql)) {
+        // Validação para verificar se uma linha foi afetada (excluida) no BD
+        if (mysqli_affected_rows($conexao))
+            $statusResposta = true;
+    }
+
+    // Solicita fechamento da conexão com o BD
+    fecharConexaoMySQL($conexao);
+
+    return $statusResposta;
 }
 
 // Função para realizar o LISTAR TODOS OS CANTATOS do BD
-function selectAllContatos() {
+function selectAllContatos()
+{
     // Abre a conexão com o BD
     $conexao = conexaoMySQL();
 
     // script para listar todos os dados do BD
-    $sql = "select * from tbl_contatos;";
+    $sql = "select * from tbl_contatos order by id_contato desc;";
     $result = mysqli_query($conexao, $sql);
 
     // Valida se o BD retornou registros
-    if($result){
+    if ($result) {
         // dentro do while o $rsDados recebe os dados do banco, converte e ainda conta quantos dados tem
         // assim que chega no ultimo elemento do array, automaticamente o loop cessa
 
@@ -93,9 +119,10 @@ function selectAllContatos() {
          * vai gerenciar a quantidade de itens no array
          */
         $cont = 0;
-        while($rsDados = mysqli_fetch_assoc($result)){
+        while ($rsDados = mysqli_fetch_assoc($result)) {
             // Cria um array com dados do BD
             $arrayDados[$cont] = array(
+                "id"        => $rsDados['id_contato'],
                 "nome"      => $rsDados['nome'],
                 "telefone"  => $rsDados['telefone'],
                 "celular"   => $rsDados['celular'],
@@ -105,9 +132,11 @@ function selectAllContatos() {
             $cont++;
         }
 
+        // Solicita o fechamento da conexão com o BD
+        fecharConexaoMySQL($conexao);
+
         return $arrayDados;
     }
-
 }
 
 selectAllContatos();
@@ -123,5 +152,3 @@ selectAllContatos();
  * mysqli_fetch_assoc($result) - converte o $result em um array de dados, que o php consegue armazenar
  *  
  */
-
-?>

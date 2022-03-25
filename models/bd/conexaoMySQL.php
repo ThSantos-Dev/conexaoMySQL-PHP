@@ -41,6 +41,10 @@
 
  }
 
+// Fecha a conexão com o banco de dados MySQL
+function fecharConexaoMySQL($conexao){
+    mysqli_close($conexao);
+}
 
 /**
  * Existem 3 formas de se conectar com o banco de dados MySQL
