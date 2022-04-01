@@ -61,6 +61,7 @@
                      */
                     $idContato = $_GET['id'];
 
+                    // Chama a função de exluir na Controller
                     $resposta = excluirContato($idContato);
 
                     // Valida o tipo de daos que a controller retornou
@@ -81,6 +82,42 @@
                     }
                 }
 
+                elseif($action == 'BUSCAR') {
+                    /**
+                     * Recebe o ID do registro que deverá ser editado,
+                     * que foi enviado pela url no link da imagem
+                     * do editar que foi acionado na index
+                     */
+                    $idContato = $_GET['id'];
+
+                    // Chama a função de buscar na Controller
+                    $dados = buscarContato($idContato);
+
+                    // Ativa a utilização de variáveis de SESSÃO no SERVIDOR
+                    session_start();
+
+                    // Guarda em uma varíavel de sessão os dados que o BD retornou para a busca do ID
+                    // Obs.: essa variável de sessão será utilizada na index.php, para colocar os DADOS
+                    // nas caixas de texto
+                    $_SESSION['dadosContato'] = $dados;
+
+                    /**
+                     * Utilizando o header, o navegador abre um nova instância da 
+                     * página indicada
+                     * 
+                     * Utilizando o header, também poderemos chamar a index.php, porém
+                     * haverá uma ação de carregamento no navegador (piscando a tela)
+                     * header('location: index.php')
+                     */
+
+
+                    // Importa o arquivo de index.php, renderizando-o na tela
+                    /**
+                     * Utilizando o require, iremos apenas importar a tela da index, assim, não 
+                     * havendo um novo carregamento da página
+                     */
+                    require_once('index.php');
+                }
 
                 break;
 

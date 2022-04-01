@@ -85,6 +85,25 @@ function listaContato() {
 
 }
 
+// Função para buscar um contato através do ID do registro
+function buscarContato($id) {
+        // Validação para verificar se o $id contém um número VÁLIDO.
+    if($id != 0 && !empty($id) && is_numeric($id)){
+        // Import do arquivo de modelagem para manipular o BD.
+        require_once('models/bd/contato.php');
+        
+        // Chama a função na model que vai buscar no BD 
+        $dados = selectByIdContato($id);
+
+        // Valida se existem dados para serem devolvidos
+        if(!empty($dados))
+            return $dados;
+        else
+            return false;
+    } else 
+        return array('idErro'   => 4,
+                     'message'  => 'Não é possível buscar um registro sem informar um ID válido.');
+}
 
 
                     /*************************************************************************** */

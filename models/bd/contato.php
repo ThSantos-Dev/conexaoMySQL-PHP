@@ -79,7 +79,7 @@ function deleteContato($id)
     $statusResposta = (bool) false;
 
     // Script SQL para exluir os dados no BD
-    $sql = "delete from tbl_contatos where id_contato=".$id;
+    $sql = "delete from tbl_contatos where id_contato=" . $id;
 
     // Validação para verificar se o script SQL está correto, sem erro de sintaxe e execut no BD
     if (mysqli_query($conexao, $sql)) {
@@ -139,8 +139,48 @@ function selectAllContatos()
     }
 }
 
-selectAllContatos();
-// LEMBRAR O MARCEL DE FECHAR AS CONEXÕES
+// Função para buscar um contato no BD através do ID do Registro
+function selectByIdContato($id)
+{
+    // Abre a conexão com o BD
+    $conexao = conexaoMySQL();
+
+    // script para buscar um Contato do dados do BD
+    $sql = "select * from tbl_contatos where id_contato = ".$id;
+    $result = mysqli_query($conexao, $sql);
+
+    // Valida se o BD retornou registros
+    if ($result) {
+        // dentro do if o $rsDados recebe os dados do banco
+
+        /**
+         * mysqli_fetch_assoc() - permite converter os dados do BD em um array para 
+         *                          manipulação no PHP 
+         * Nesta repetição estamos, convertendo os dados do BD em um array ($rsDados),
+         * além de o próprio if conseguir gerenciar se o banco retornou dados
+         * e atribui a variável $rsDados
+         * 
+         */
+        if ($rsDados = mysqli_fetch_assoc($result)) {
+            // Cria um array com dados do BD
+            $arrayDados= array(
+                "id"        => $rsDados['id_contato'],
+                "nome"      => $rsDados['nome'],
+                "telefone"  => $rsDados['telefone'],
+                "celular"   => $rsDados['celular'],
+                "email"     => $rsDados['email'],
+                "obs"       => $rsDados['obs']
+            );
+        }
+
+        // Solicita o fechamento da conexão com o BD
+        fecharConexaoMySQL($conexao);
+
+        return $arrayDados;
+    }
+}
+
+
 
 /**
  * Quando usamos os scripts update, delete e insert não há devolução de dados pelo banco
