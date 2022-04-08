@@ -65,8 +65,36 @@ function insertContato($dadosContato)
 }
 
 // Função para realizar o UPDATE no BD
-function updateContato()
+function updateContato($dadosContato)
 {
+    // Abre a conexão com o BD
+    $conexao = conexaoMySQL();
+
+    // Declaração de variável  oara utilizar no return dessa função
+    $statusResposta = (bool) false;
+
+    // Script SQL para inserir os dados no BD
+    $sql = "
+        update tbl_contatos set
+            nome         = '" . $dadosContato['nome']     . "',
+            telefone     = '" . $dadosContato['telefone'] . "',
+            celular      = '" . $dadosContato['celular']  . "',
+            email        = '" . $dadosContato['email']    . "',
+            obs          = '" . $dadosContato['obs']      . "'
+        where id_contato =  " . $dadosContato['id'];
+
+    // Executa Script no BD
+    // msyqli_query(dados de conexao, script sql)
+    // Validação para verificar se o script SQL está correto
+    if (mysqli_query($conexao, $sql)) {
+        // Validação para verificar se uma linha foi afetada (acrescentada) no BD
+        if (mysqli_affected_rows($conexao))
+            $statusResposta = true;
+    }
+
+    // Solicita o fechamento da conexão com o BD
+    fecharConexaoMySQL($conexao);
+    return $statusResposta;
 }
 
 // Função para realizar o EXCLUIR no BD

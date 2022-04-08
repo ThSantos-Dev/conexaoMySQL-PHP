@@ -66,8 +66,47 @@ function excluirContato($id) {
 }
 
 //  Função para receber dados da VIEW e encaminhar dados para a MODEL (Atualizar)
-function atualizaContato() {
+function atualizarContato($dadosContato, $id) {
+    // Validação para verificar se o objeto está vazio
+    if(!empty($dadosContato)){
+        // Validação de caixa vazia dos elementos Nome, Celular e Email, pois são obrigatórios no BD
+        if(!empty($dadosContato['txtNome']) && !empty($dadosContato['txtCelular']) && !empty($dadosContato['txtEmail'])){
+            // Validação para garantir que o ID seja válido
+            if(!empty($id) && $id != 0 && is_numeric($id)) {
+                /*************************************************************************
+                 * Criação do array de dados que será encaminhado a model para
+                 * inserir no BD, é importante criar este array conforme
+                 * as necessidades de manipulação do BD.
+                 * 
+                 * OBS: criar as chaves do Array conforme os nomes dos atributos do BD
+                 **************************************************************************/
 
+                $arrayDados = array(
+                    "id"        => $id,
+                    "nome"      => $dadosContato['txtNome'],
+                    "celular"   => $dadosContato['txtCelular'],
+                    "telefone"  => $dadosContato['txtTelefone'],
+                    "email"     => $dadosContato['txtEmail'],
+                    "obs"       => $dadosContato['txtObs']
+                );
+
+                // Import do arquivo de modelagem para manipular o BD
+                require_once('models/bd/contato.php');
+                // Chama a função que fará o insert no BD (essa função está na Model)
+                if(updateContato($arrayDados))
+                    return true;
+                else 
+                    return array('idErro'   => 1,
+                                'message'  => 'Não foi possível atualizar os dados no Banco de Dados.');
+            }
+            else 
+                return array('idErro'   => 4,
+                            'message'  => 'Não é possível atualizar um registro sem informar um ID válido.');
+        }
+        else 
+            return array('idErro'   => 2,
+                         'message'  => 'Erro. Há campos obrigatórios que necessitam ser preenchidos.');   
+    }
 }
 
 // Função para solicitar dados da model e encaminhar a lista de contatos para a VIEW

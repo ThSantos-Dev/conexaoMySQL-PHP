@@ -117,6 +117,31 @@
                      * havendo um novo carregamento da página
                      */
                     require_once('index.php');
+                } 
+                elseif($action == 'EDITAR'){
+                    // Recebe o ID que foi encaminhado pelo action do form pela URL
+                    $idContato = $_GET['id'];
+
+                    // Chama a função de editar na controller
+                    $resposta = atualizarContato($_POST, $idContato);
+                    // Valida o tipo de dados que a controller retornou
+                    if(is_bool($resposta)){
+                        // Verificando se o retorno foi verdadeiro
+                        if($resposta)
+                        echo "<script>
+                                alert('Registro Atualizado com Sucesso!')
+                                window.location.href = 'index.php'
+                                </script>";
+                        
+                    // Se o retorno for um array significa houve erro no processo de atualização 
+                    } elseif(is_array($resposta)){
+                        echo "<script>
+                                alert('".$resposta['message']."')
+                                window.history.back()
+                            </script>";
+                    }
+                    // window.location.href = arquivo
+                    // window.history.back()
                 }
 
                 break;
